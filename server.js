@@ -8,6 +8,7 @@ const morgan = require('morgan');
 require('dotenv').config({});
 const { readdirSync } = require('fs');
 const path = require('path');
+const corsOptions = require('./config/corsOptions');
 
 const app = express();
 
@@ -20,7 +21,7 @@ app.use(
     },
   })
 );
-app.use(cors(corsOptions));
+app.use(cors({ origin: 'https://olxx-6073.onrender.com' }));
 
 app.use(express.json({ limit: '2mb' }));
 app.use(cookieParser());
@@ -28,7 +29,7 @@ app.use(compression());
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 
-const mongoConnection = process.env.MONGODB_CONNECTION.replace('<password>', process.env.MONGODB_PASSWORD);
+const mongoConnection = process.env.MONGODB_CONNECTION;
 // process.on('uncaughtException', (err) => {
 //   console.log(err.name, err.message);
 //   console.log('UNCAUGHT EXCEPTION ⚡⚡⚡⚡ Shutting down... ');
