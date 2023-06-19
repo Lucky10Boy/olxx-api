@@ -1,7 +1,7 @@
 const SubCategory = require('../models/subCategoryModel');
 const slugify = require('slugify');
 const Category = require('../models/categoryModel');
-const AppError = require('../appError');
+const AppError = require('../AppError');
 
 exports.createSubCategory = async (req, res, next) => {
   const newSubCategory = await SubCategory.create({

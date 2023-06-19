@@ -1,6 +1,6 @@
 const Product = require('../models/productModel');
 const slugify = require('slugify');
-const AppError = require('../appError');
+const AppError = require('../AppError');
 const catchAsync = require('../catchAsync');
 const uniqid = require('uniqid');
 
