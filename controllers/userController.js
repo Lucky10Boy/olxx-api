@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Email = require('../email');
 const catchAsync = require('../catchAsync');
-const AppError = require('../appError');
+const AppError = require('../AppError');
 
 const signToken = (id) => {
   return jwt.sign(
