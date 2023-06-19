@@ -8,6 +8,7 @@ const morgan = require('morgan');
 require('dotenv').config({});
 const { readdirSync } = require('fs');
 const path = require('path');
+const corsOptions = require('./config/corsOptions');
 
 const app = express();
 
