@@ -21,7 +21,7 @@ app.use(
     },
   })
 );
-app.use(cors(corsOptions));
+app.use(cors({origin: 'https://olxx-6073.onrender.com'}));
 
 app.use(express.json({ limit: '2mb' }));
 app.use(cookieParser());
