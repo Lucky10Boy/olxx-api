@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const Email = require('../email');
 const catchAsync = require('../catchAsync');
 const AppError = require('../AppError');
+const nodemailer = require('nodemailer');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.SECRET_KEY || 'somethingsuperpuperultramarvelbarcelonasecret', {
@@ -158,11 +159,23 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   if (!user) {
     return next(new AppError('Электронная почта является неверна', res));
   }
+
+  const transporter = nodemailer.createTransport({
+    host: 'gmail',
+    port: 465,
+    secure: true,
+    auth: {
+      // TODO: replace `user` and `pass` values from <https://forwardemail.net>
+      user: process.env.AUTH_EMAIL,
+      pass: process.env.AUTH_PASS,
+    },
+  });
   const passwordResetToken = user.createPasswordResetToken();
   await user.save();
-  const url = `http://${process.env.REACT_APP}/user/reset/password/${passwordResetToken}`;
+  const url = `http://localhost:3000/user/reset/password/${passwordResetToken}`;
   try {
-    await new Email(user.email, url).sendPasswordReset();
+    const nodemailer = require('nodemailer');
+
     res.json({
       message: 'Почта отправлена!',
       status: 'success',

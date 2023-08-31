@@ -17,7 +17,6 @@ const userSchema = new mongoose.Schema({
   },
   phoneNumber: {
     type: String,
-    unique: true,
   },
   avatarPhoto: {
     type: String,
@@ -36,10 +35,7 @@ const userSchema = new mongoose.Schema({
 
 userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   if (this.passwordChangedAt) {
-    const changedTimestamp = parseInt(
-      this.passwordChangedAt.getTime() / 1000,
-      10
-    );
+    const changedTimestamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
     return JWTTimestamp === changedTimestamp; // 300 < 200;
   }
 
