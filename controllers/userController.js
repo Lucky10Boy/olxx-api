@@ -7,13 +7,9 @@ const catchAsync = require('../catchAsync');
 const AppError = require('../AppError');
 
 const signToken = (id) => {
-  return jwt.sign(
-    { id },
-    process.env.SECRET_KEY || 'somethingsuperpuperultramarvelbarcelonasecret',
-    {
-      expiresIn: '90d',
-    }
-  );
+  return jwt.sign({ id }, process.env.SECRET_KEY || 'somethingsuperpuperultramarvelbarcelonasecret', {
+    expiresIn: '90d',
+  });
 };
 
 exports.register = catchAsync(async (req, res, next) => {
@@ -30,9 +26,7 @@ exports.register = catchAsync(async (req, res, next) => {
     await user.save();
     const url = `http://${process.env.REACT_APP}/user/register/verify`;
     try {
-      await new Email(req.body.email, url).sendEmailVerification(
-        emailVerificationCode
-      );
+      await new Email(req.body.email, url).sendEmailVerification(emailVerificationCode);
       res.json({
         message: 'Почта отправлена!',
         status: 'success',
@@ -41,12 +35,7 @@ exports.register = catchAsync(async (req, res, next) => {
       });
     } catch (error) {
       console.log(error);
-      return next(
-        new AppError(
-          'В сервере произошла ошибка. Сделайте запрос попозже.',
-          res
-        )
-      );
+      return next(new AppError('В сервере произошла ошибка. Сделайте запрос попозже.', res));
     }
   } else if (!req.body.email && req.body.phoneNumber) {
     const password = await bcrypt.hash(req.body.password, 12);
@@ -111,9 +100,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
     console.log(user);
     if (user.verified === false) {
-      return next(
-        new AppError('Пожалуста сначала подтвердите свой аккаунт', res)
-      );
+      return next(new AppError('Пожалуста сначала подтвердите свой аккаунт', res));
     }
     const withoutPasswordUser = await User.findOne({
       phoneNumber: req.body.phoneNumber,
@@ -149,12 +136,7 @@ exports.addToFavorites = catchAsync(async (req, res, next) => {
 
 exports.verifyProduct = catchAsync(async (req, res, next) => {
   if (req.user.role !== 'admin') {
-    return next(
-      new AppError(
-        'Чтобы сделать этот запрос вы должны быть администратором',
-        res
-      )
-    );
+    return next(new AppError('Чтобы сделать этот запрос вы должны быть администратором', res));
   }
   if (!req.body.productId) {
     return next(new AppError('ID продукта является неверным', res));
@@ -191,9 +173,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     console.log(error);
-    return next(
-      new AppError('В сервере произошла ошибка. Сделайте запрос попозже.', res)
-    );
+    return next(new AppError('В сервере произошла ошибка. Сделайте запрос попозже.', res));
   }
 });
 exports.resetPassword = catchAsync(async (req, res, next) => {
@@ -257,9 +237,7 @@ exports.editPassword = catchAsync(async (req, res, next) => {
     res.json({ status: 'success', message: 'Успешно изменили пароль' });
   }
   if (req.body.phoneNumber) {
-    const user = await User.findOneAndUpdate(phoneNumber, password).select(
-      '+password'
-    );
+    const user = await User.findOneAndUpdate(phoneNumber, password).select('+password');
     if (!user) {
       return next(new AppError('Проблема в сервере. Попробуйте позже', res));
     }
