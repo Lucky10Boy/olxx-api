@@ -21,7 +21,7 @@ app.use(
     },
   })
 );
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: 'https://bozortoy.uz' }));
 
 app.use(express.json({ limit: '2mb' }));
 app.use(cookieParser());
